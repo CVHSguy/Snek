@@ -19,7 +19,6 @@ public class Snek {
     }
 
     public void moveSnake(int X,int Y){
-
         rect.setX(X);
         rect.setY(Y);
     }

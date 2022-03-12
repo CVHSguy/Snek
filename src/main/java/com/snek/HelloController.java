@@ -1,9 +1,6 @@
 package com.snek;
 
-import com.snek.game.Board;
-import com.snek.game.Main;
-import com.snek.game.Snek;
-import com.snek.game.Square;
+import com.snek.game.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -35,6 +32,7 @@ public class HelloController  {
     AnchorPane anchorPane;
 
     Snek snek;
+    Food food;
     int movementOffset = 19;
     int moveX = 19;
     int moveY = 0;
@@ -74,6 +72,18 @@ public class HelloController  {
         anchorPane.getChildren().add(snake);
         snek.moveSnake(190,190);
     }
+    public void spawnFood(){
+        food = new Food(20);
+        Rectangle asd = food.getFood();
+        anchorPane.getChildren().add(asd);
+        Random rn = new Random();
+        int randomX = rn.nextInt(Main.amountOfFields);
+        int randomY = rn.nextInt(Main.amountOfFields);
+        int randomspawn = rn.nextInt(10);
+        if(randomspawn+1>=7 & cooldown>=10){
+            food.moveFood(randomX*Main.boardSize, randomY*Main.boardSize);
+        }
+    }
 
     private void drawMisc(){
         Timer timer = new Timer();
@@ -81,13 +91,13 @@ public class HelloController  {
             @Override
             public void run() {
                 int[] snekPos = snek.getPos();
-                if(snekPos[0]>=Main.boardSize-1) {
+                if(snekPos[0]>Main.boardSize-(moveX*2)) {
                     snek.moveSnake(0,snekPos[1]+moveY);
-                }else if (snekPos[1]>=Main.boardSize-1){
+                }else if (snekPos[1]>Main.boardSize-(moveY*2)){
                     snek.moveSnake(snekPos[0] + moveX,0);
                 }else snek.moveSnake(snekPos[0] + moveX, snekPos[1] + moveY);
-
-                System.out.println((Main.boardSize-1)/21);
+                //spawnFood();
+                cooldown++;
 
             }
         },0,movementFrequency);
@@ -111,16 +121,16 @@ public class HelloController  {
         //java: an enum switch case label must be the unqualified name of an enumeration constant | so cant use switch cases
         if(e.getCode().equals(KeyCode.W)){
             moveX = 0;
-            moveY = -(Main.boardSize-1)/21;
+            moveY = -(Main.boardSize-1)/Main.amountOfFields;
         }else if(e.getCode().equals(KeyCode.D)){
-            moveX = (Main.boardSize-1)/21;
+            moveX = (Main.boardSize-1)/Main.amountOfFields;
             moveY = 0;
         }else if(e.getCode().equals(KeyCode.A)){
-            moveX = -(Main.boardSize-1)/21;
+            moveX = -(Main.boardSize-1)/Main.amountOfFields;
             moveY = 0;
         }else if(e.getCode().equals(KeyCode.S)){
             moveX = 0;
-            moveY = (Main.boardSize-1)/21;
+            moveY = (Main.boardSize-1)/Main.amountOfFields;
         }
     }
 }
